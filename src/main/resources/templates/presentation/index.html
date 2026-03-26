@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/indexStyle.css}">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <img src="/images/header.jpg" alt="Registro Nacional">
+    </div>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="/">INICIO</a>
+    </div>
+
+    <!-- Contenido -->
+    <div class="content">
+        <h5>Nuestra Misión</h5>
+        <p>"El Registro Nacional de Costa Rica es la Institucion Publica, rectora y responsable de la  actividad registral y geoespacial; protege los derechos inscritos de personas fisicas y juridicas,ofreciendo servicios de calidad y seguridad juridica a los usuarios."
+        </p>
+
+        <h5>Nuestra Visión</h5>
+        <p>"Fortalecer la seguridad juridica y el liderazgo en la prestacion de servicios calidad e innovadores, en armonia con el ambiente."
+        </p><br>
+
+        <h5>Notificaciones</h5>
+        <p>Señor usuario. En caso de requerir certificaciones para ser tramitadas ante el Ministerio de Relaciones Exteriores o para efectos de remates, debera solicitarlas en las sedes, central o regional,del Registro Nacional.
+            Este sistema funciona en forma apropiada en las siguientes tecnologias, Navegadores: FireFox 4 o superior, Internet Explorer 7 o superior, Google Crome, Safari 3.x y superior. Sistemas Operativos: Windows 7 o superior y Apple OS X  10.5. o superior
+            El horario del Centro de Atencion al Cliente es de Lunes a Viernes de 8:00 AM a 4:00 PM. Tel: 2202-0888
+        </p>
+
+        <div class="login-area" th:if="${session.usuarioId == null}">
+            <h3>INGRESO</h3>
+            <div th:if="${error}" class="error-message" th:text="${error}"></div>
+            <form action="/login" method="post">
+                <input type="text" name="usuarioId" placeholder="Usuario" required>
+                <input type="password" name="password" placeholder="Contraseña" required>
+                <button type="submit">Ingresar</button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Todos los derechos reservados. 2013. Registro Nacional. San José, Curridabat.<br>
+            Apartado Postal 523-2010 Curridabat - mpdigital@mp.go.cr</p>
+    </div>
+</div>
+</body>
+</html>

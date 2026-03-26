@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/documentosStyle.css}">
+
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <img src="/images/header.jpg" alt="Registro Nacional">
+    </div>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="/VolverAInicio">INICIO</a>
+        <a href="/">DOCUMENTOS</a>
+        <a th:if="${session.usuarioId != null}" th:text="${session.usuarioId}">Usuario</a>
+        <a href="/logout">Salir</a>
+    </div>
+
+    <!-- Contenido -->
+    <div class="content">
+        <h4>DOCUMENTOS</h4>
+        <img src="/images/info.gif" alt="Info">
+        <p>Por favor seleccione el tipo de documento que desee y luego presione "Ir". Una vez elegido el documento, por favor presione el botón agregar.</p>
+        <br><br>
+
+        <form action="/filtrar" method="get">
+            <label>Tipo de Documento:</label>
+            <select name="tipoId" required>
+                <option value="">Seleccione</option>
+                <option th:each="tipo : ${tipos}"
+                        th:value="${tipo.id}"
+                        th:text="${tipo.nombre}"
+                        th:selected="${tipo.id == tipoSeleccionado}">
+                </option>
+            </select>
+            <button type="submit">Ir</button>
+        </form>
+        <br><br>
+
+        <div th:if="${not #lists.isEmpty(documentos)}">
+            <h3>Documentos Disponibles</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>Documento</th>
+                    <th>Precio</th>
+                    <th>Agregar</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="doc : ${documentos}">
+                    <td th:text="${doc.descripcion}"></td>
+                    <td>₡ <span th:text="${#numbers.formatDecimal(doc.monto + doc.timbres, 0, 'COMMA', 2, 'POINT')}"></span></td>
+                    <td>
+                        <form action="/agregar" method="post" style="display: inline;">
+                            <input type="hidden" name="documentoId" th:value="${doc.id}">
+                            <button type="submit" class="btn-add">
+                                <img src="/images/agregar.jpg" alt="Agregar" style="width: 20px; height: 20px;">
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Mis Documentos</h3>
+        <img src="/images/info.gif" alt="Info">
+        <p>Este es el detalle de sus documentos. Recuerde que puede agregar otros o aumentar la cantidad de uno volviendo a agregarlo.</p>
+        <br><br>
+        <table>
+
+            <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Monto</th>
+                <th>Timbres</th>
+                <th>Cantidad</th>
+                <th>Monto Total</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="linea : ${carrito}">
+                <td th:text="${linea.documento.descripcion}"></td>
+                <td>₡ <span th:text="${#numbers.formatDecimal(linea.documento.monto, 0, 'COMMA', 2, 'POINT')}"></span></td>
+                <td>₡ <span th:text="${#numbers.formatDecimal(linea.documento.timbres, 0, 'COMMA', 2, 'POINT')}"></span></td>
+                <td th:text="${linea.cantidad}"></td>
+                <td>₡ <span th:text="${#numbers.formatDecimal((linea.documento.monto + linea.documento.timbres) * linea.cantidad, 0, 'COMMA', 2, 'POINT')}"></span></td>
+            </tr>
+            <tr th:if="${carrito.isEmpty()}">
+                <td colspan="6" class="empty">No hay documentos en el carrito</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="total-section">
+            <div>
+                Total: ₡ <span th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 2, 'POINT')}"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Todos los derechos reservados. 2013. Registro Nacional. San José, Curridabat.<br>
+            Apartado Postal 523-2010 Curridabat - mpdigital@mp.go.cr</p>
+    </div>
+</div>
+</body>
+</html>
